@@ -98,12 +98,14 @@ def shortest_path(source, target):
      
     path = []
     start = Node(state=source,parent=None,action=None)
+    #state is the movie star, action is the movie from which the state and the parent are connected
     queueFrontier = QueueFrontier()
     queueFrontier.add(start)
+    explored = set()
     
     #add start
 
-    explored = set()
+    
     while True:
 
         if queueFrontier.empty():
@@ -112,11 +114,10 @@ def shortest_path(source, target):
         node = queueFrontier.remove()
 
         explored.add(node.state)
-        for movie,stars in neighbors_for_person(node.state):
+        for movie,stars in neighbors_for_person(node.state): #these are the children
             if not queueFrontier.contains_state(stars) and stars not in explored:
                 child = Node(state=stars,parent=node,action=movie)
                 if child.state == target:
-                
                     while child.parent is not None:
                         path.append((child.action,child.state))
                         child = child.parent
@@ -125,9 +126,7 @@ def shortest_path(source, target):
                 else:
                     queueFrontier.add(child)
                     explored.add(stars)
-        
-
-    return None
+    
 def person_id_for_name(name): 
     """
     Confirms name is in csv file and
